@@ -17,6 +17,7 @@ class MainView extends StatefulWidget {
     this.tabTopBuilder,
     this.tabBottomBuilder,
     this.searchAppBarBuilder,
+    this.errorBuilder,
   }) : super(key: key);
 
   final bool showGIFs;
@@ -25,6 +26,7 @@ class MainView extends StatefulWidget {
   final TabTopBuilder? tabTopBuilder;
   final TabBottomBuilder? tabBottomBuilder;
   final SearchAppBarBuilder? searchAppBarBuilder;
+  final Widget? errorBuilder;
 
   @override
   _MainViewState createState() => _MainViewState();
@@ -105,6 +107,7 @@ class _MainViewState extends State<MainView>
               showGIFs: widget.showGIFs,
               showStickers: widget.showStickers,
               showEmojis: widget.showEmojis,
+              errorBuilder: widget.errorBuilder,
             ),
           ),
           widget.tabBottomBuilder?.call(context) ?? GiphyTabBottom(),

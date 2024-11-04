@@ -55,6 +55,9 @@ class GiphyGet {
     TabTopBuilder? tapTopBuilder,
     TabBottomBuilder? tabBottomBuilder,
     SearchAppBarBuilder? searchAppBarBuilder,
+    TextStyle? labelStyle,
+    TextStyle? unselectedLabelStyle,
+    Widget? errorBuilder,
   }) {
     if (apiKey == "") {
       throw Exception("apiKey must be not null or not empty");
@@ -91,6 +94,8 @@ class GiphyGet {
               textUnselectedColor: textUnselectedColor ??
                   Theme.of(context).textTheme.bodySmall?.color,
               searchText: searchText,
+              labelStyle: labelStyle,
+              unselectedLabelStyle: unselectedLabelStyle,
               rating: rating,
               lang: lang,
             ),
@@ -104,6 +109,7 @@ class GiphyGet {
             tabTopBuilder: tapTopBuilder,
             tabBottomBuilder: tabBottomBuilder,
             searchAppBarBuilder: searchAppBarBuilder,
+            errorBuilder: errorBuilder,
           ),
         ),
       ),

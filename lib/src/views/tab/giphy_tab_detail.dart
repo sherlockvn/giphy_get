@@ -8,11 +8,13 @@ import 'package:giphy_get/src/client/models/type.dart';
 import 'package:giphy_get/src/providers/app_bar_provider.dart';
 import 'package:giphy_get/src/providers/tab_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter/foundation.dart';
 
 class GiphyTabDetail extends StatefulWidget {
   final String type;
   final ScrollController scrollController;
-  GiphyTabDetail({Key? key, required this.type, required this.scrollController})
+  final Widget? errorBuilder;
+  GiphyTabDetail({Key? key, required this.type, required this.scrollController, this.errorBuilder})
       : super(key: key);
 
   @override
@@ -123,7 +125,9 @@ class _GiphyTabDetailState extends State<GiphyTabDetail> {
   Widget build(BuildContext context) {
     if (_list.isEmpty) {
       return Center(
-        child: CircularProgressIndicator(),
+        child: CircularProgressIndicator(
+          color: Theme.of(context).primaryColor,
+        ),
       );
     }
 
@@ -219,36 +223,41 @@ class _GiphyTabDetailState extends State<GiphyTabDetail> {
     } else {
       offset = _collection!.pagination!.offset + _collection!.pagination!.count;
     }
-
-    // Get Gif or Emoji
-    if (widget.type == GiphyType.emoji) {
-      _collection = await client.emojis(offset: offset, limit: _limit);
-    } else {
-      // If query text is not null search gif else trendings
-      if (_appBarProvider.queryText.isNotEmpty) {
-        _collection = await client.search(_appBarProvider.queryText,
-            lang: _tabProvider.lang,
-            offset: offset,
-            rating: _tabProvider.rating,
-            type: widget.type,
-            limit: _limit);
+    try {
+      // Get Gif or Emoji
+      if (widget.type == GiphyType.emoji) {
+        _collection = await client.emojis(offset: offset, limit: _limit);
       } else {
-        _collection = await client.trending(
-            lang: _tabProvider.lang,
-            offset: offset,
-            rating: _tabProvider.rating,
-            type: widget.type,
-            limit: _limit);
+        // If query text is not null search gif else trendings
+        if (_appBarProvider.queryText.isNotEmpty) {
+          _collection = await client.search(_appBarProvider.queryText,
+              lang: _tabProvider.lang,
+              offset: offset,
+              rating: _tabProvider.rating,
+              type: widget.type,
+              limit: _limit);
+        } else {
+          _collection = await client.trending(
+              lang: _tabProvider.lang,
+              offset: offset,
+              rating: _tabProvider.rating,
+              type: widget.type,
+              limit: _limit);
+        }
       }
-    }
 
-    // Set result to list
-    if (_collection!.data.isNotEmpty && mounted) {
-      setState(() {
-        _list.addAll(_collection!.data);
-      });
+      // Set result to list
+      if (_collection!.data.isNotEmpty && mounted) {
+        setState(() {
+          _list.addAll(_collection!.data);
+        });
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print("Error: $e");
+      }
+      _list = [];
     }
-
     _isLoading = false;
   }
 

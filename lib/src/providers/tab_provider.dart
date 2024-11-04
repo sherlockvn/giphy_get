@@ -11,6 +11,8 @@ class TabProvider with ChangeNotifier {
   String rating = GiphyRating.g;
   String lang = GiphyLanguage.english;
   String randomID = "";
+  TextStyle? labelStyle;
+  TextStyle? unselectedLabelStyle;
 
   String? _tabType;
   String get tabType => _tabType ?? '';
@@ -28,6 +30,8 @@ class TabProvider with ChangeNotifier {
     required this.rating,
     required this.randomID,
     required this.lang,
+    this.labelStyle,
+    this.unselectedLabelStyle,
   });
 
   void setTabColor(Color tabColor) {

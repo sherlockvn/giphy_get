@@ -85,10 +85,14 @@ class _GiphyTabBarState extends State<GiphyTabBar> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 5.0),
       child: TabBar(
+        dividerColor: Colors.transparent,
+        labelPadding: EdgeInsets.zero,
         indicatorColor: _tabProvider.tabColor,
         labelColor: _tabProvider.textSelectedColor,
+        labelStyle: _tabProvider.labelStyle,
+        unselectedLabelStyle: _tabProvider.unselectedLabelStyle,
         unselectedLabelColor: _tabProvider.textUnselectedColor,
-        indicatorSize: TabBarIndicatorSize.label,
+        indicatorSize: TabBarIndicatorSize.tab,
         controller: widget.tabController,
         tabs: _tabs.map((e) => e.tab).toList(),
         onTap: _setTabType,
